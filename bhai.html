@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dosti ka Sandesh - Progressive Reveal</title>
+  <script src="https://tenor.com/embed.js"></script>
+  <style>
+    body {
+      background: linear-gradient(135deg, #2898c4, #ffebf3);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #4a2c2a;
+      margin: 0;
+      padding: 2rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    .container {
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 3rem;
+      max-width: 700px;
+      box-shadow: 0 10px 30px rgba(255, 182, 193, 0.5);
+      line-height: 1.8;
+      font-size: 1.2rem;
+      position: relative;
+    }
+    #message {
+      min-height: 400px;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+    .line {
+      opacity: 0;
+      animation: fadeInSlide 1s ease-in-out forwards;
+      font-weight: 500;
+    }
+    .poem {
+      font-style: italic;
+      color: #b3476e;
+      font-weight: 600;
+      padding-left: 1rem;
+      border-left: 3px solid #ffa4bd;
+      margin: 0;
+    }
+    .closing {
+      font-weight: 700;
+      color: #7a2a3a;
+      margin: 0;
+    }
+    p {
+      margin: 0;
+    }
+    @keyframes fadeInSlide {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .loading-dots {
+      display: none;
+      font-size: 1.5rem;
+      color: #d691a3;
+      animation: blink 1.5s infinite;
+      margin-top: 1rem;
+      text-align: center;
+    }
+    @keyframes blink {
+      0%, 50% { opacity: 1; }
+      51%, 100% { opacity: 0.3; }
+    }
+    #gif-container {
+      display: none;
+      text-align: center;
+      margin-top: 2rem;
+      animation: fadeIn 2s ease-in-out forwards;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div id="message"></div>
+    <div class="loading-dots" id="dots">...</div>
+    <div id="gif-container">
+      <div class="tenor-gif-embed" data-postid="24984890" data-share-method="host" data-aspect-ratio="1.04348" data-width="100%"><a href="https://tenor.com/view/panda-sorry-hd-pink-gif-24984890">Panda Sorry HD Pink GIF</a></div>
+    </div>
+  </div>
+
+  <script>
+    // Lines grouped by paragraphs as per user request:
+    // Paragraph 1: lines 1 to 3 (index 0 to 2)
+    // Paragraph 2: lines 4 to 7 (index 3 to 6)
+    // Paragraph 3: lines 8 to 10 (index 7 to 9)
+    // Paragraph 4: remaining lines (index 10 onwards)
+
+    const lines = [
+      "Sorry Headache",
+      "Sorry for the things you’ve gone through because of me in these days. I know I messed up everything but I didn’t wanted to do so.🫠",
+      "Mujhe pata hai jo ho rha hai wo hona nhi chaiye tha but ab jo ho gya usko bhul kar aage badhte hai. I don’t want our 4 years of friendship to end like this because of something I would never like to do.🙂",
+      "Please jo hua usko bhul jao aur phir se pehle jaise besties bann jaate h jaise pehle hua krte the. I can’t afford to loose you because of something you got to know about me from someone.😕",
+      "Sab kuch fix krte hai aur phir se pehle jaise bann jaate hai.☹️",
+      "I am ready to listen to all the things aur sab kuch sort out krte hai let’s not let our ego to come in between kyunki uske vajah se jo chiz fix ho sakta hai wo bhi nhi hoga isliye please understand and forgive me for my mistakes.",
+      "Something’s in between these year faded between us but that’s alright you changed a little but that’s totally fine.",
+      "I’m really very sorry Headache.🥺❤️"
+    ];
+
+    // Paragraph grouping by indices:
+    const paragraphs = [
+      lines.slice(0, 3),  // lines 1-3
+      lines.slice(3, 7),  // lines 4-7
+      lines.slice(7, 10), // lines 8-10
+      // No remaining lines beyond index 9, so no 4th paragraph here
+    ];
+
+    let paraIndex = 0;
+    const messageContainer = document.getElementById('message');
+    const dots = document.getElementById('dots');
+    const gifContainer = document.getElementById('gif-container');
+
+    function showParagraph() {
+      if (paraIndex < paragraphs.length) {
+        const paraLines = paragraphs[paraIndex];
+        const p = document.createElement('p');
+
+        // Determine paragraph style:
+        // Paragraph 2 (index 1) is poem style
+        // Paragraph 3 (index 2) and 4 (index 3) closing style
+        if (paraIndex === 1) {
+          p.classList.add('poem');
+        } else if (paraIndex >= 2) {
+          p.classList.add('closing');
+        }
+
+        // Join lines with spaces and line breaks for poem paragraph
+        if (paraIndex === 1) {
+          // For poem paragraph, join lines with <br> for line breaks
+          p.innerHTML = paraLines.join('<br>');
+        } else {
+          // For other paragraphs, join lines with space
+          p.textContent = paraLines.join(' ');
+        }
+
+        p.style.opacity = '0';
+        messageContainer.appendChild(p);
+
+        // Trigger fadeInSlide animation by forcing reflow and adding class
+        setTimeout(() => {
+          p.style.animation = 'fadeInSlide 1s ease-in-out forwards';
+        }, 10);
+
+        dots.style.display = 'none';
+        setTimeout(() => { dots.style.display = 'block'; }, 3000);
+
+        paraIndex++;
+      } else {
+        dots.style.display = 'none';
+        gifContainer.style.display = 'block';
+      }
+    }
+
+    window.onload = () => {
+      dots.style.display = 'block';
+      showParagraph(); // Show first paragraph immediately
+      setInterval(showParagraph, 5000);
+    };
+  </script>
+</body>
+</html>
